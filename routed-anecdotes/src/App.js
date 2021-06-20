@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import { 
   Switch, Route, Link,
-  useRouteMatch
+  useRouteMatch,
+  useHistory
 } from 'react-router-dom'
 
 const Menu = () => {
@@ -100,6 +101,14 @@ const CreateNew = (props) => {
 
 }
 
+const Notification = ({ notification }) => {
+  if (!notification) return null
+
+  return (
+    <p>{notification}</p>
+  )
+}
+
 const App = () => {
   const [anecdotes, setAnecdotes] = useState([
     {
@@ -118,7 +127,8 @@ const App = () => {
     }
   ])
 
-  const [notification, setNotification] = useState('')
+  const [notification, setNotification] = useState(null)
+  const history = useHistory()
   const match = useRouteMatch('/anecdotes/:id')
   const anecdote = match 
     ? anecdotes.find(anecdote => anecdote.id === match.params.id)
@@ -128,6 +138,12 @@ const App = () => {
   const addNew = (anecdote) => {
     anecdote.id = (Math.random() * 10000).toFixed(0)
     setAnecdotes(anecdotes.concat(anecdote))
+    history.push('/')
+
+    setNotification(`${anecdote.content} created`)
+    setTimeout(() => {
+      setNotification(null)
+    }, 1000 * 10)
   }
 
   const anecdoteById = (id) =>
@@ -148,6 +164,7 @@ const App = () => {
     <div>
       <h1>Software anecdotes</h1>
       <Menu />
+      <Notification notification={notification} />
 
       <Switch>
         <Route path='/anecdotes/:id'>
