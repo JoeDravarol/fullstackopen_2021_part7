@@ -89,29 +89,6 @@ const App = () => {
     }
   }
 
-  const updateBlog = async () => {
-    try {
-      const returnedBlog = await blogService.update(id, blogObject)
-      const updatedBlogs = blogs.map(
-        blog => blog.id !== returnedBlog.id ? blog : returnedBlog
-      )
-      setBlogs(updatedBlogs)
-    } catch (exception) {
-      displayNotificationWith(exception.response.data.error, 'error')
-    }
-  }
-
-  const deleteBlog = async (id) => {
-    try {
-      await blogService.remove(id)
-      setBlogs(
-        blogs.filter(blog => blog.id !== id)
-      )
-    } catch (exception) {
-      displayNotificationWith(exception.response.data.error, 'error')
-    }
-  }
-
   const blogFormRef = useRef()
 
   // Sort in descending order
@@ -152,8 +129,7 @@ const App = () => {
         <Blog
           key={blog.id}
           blog={blog}
-          updateBlogLikes={updateBlog}
-          removeBlog={deleteBlog}
+          setNotification={displayNotificationWith}
         />
       )}
     </div>

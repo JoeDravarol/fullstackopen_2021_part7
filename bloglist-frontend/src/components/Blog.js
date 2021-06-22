@@ -1,7 +1,10 @@
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { updateBlog, removeBlog } from '../reducers/blogReducer'
 
-const Blog = ({ blog, updateBlogLikes, removeBlog }) => {
+const Blog = ({ blog, setNotification }) => {
   const [visible, setVisible] = useState(false)
+  const dispatch = useDispatch()
 
   const showWhenVisible = { display: visible ? '' : 'none' }
 
@@ -17,7 +20,7 @@ const Blog = ({ blog, updateBlogLikes, removeBlog }) => {
     setVisible(!visible)
   }
 
-  const incrementLikes = () => {
+  const incrementLikes = async () => {
     const newBlog = {
       title: blog.title,
       author: blog.author,
@@ -26,14 +29,22 @@ const Blog = ({ blog, updateBlogLikes, removeBlog }) => {
       user: blog.user.id
     }
 
-    updateBlogLikes(blog.id, newBlog)
+    try {
+      dispatch( updateBlog(blog.id, newBlog) )
+    } catch (exception) {
+      setNotification(exception.response.data.error, 'error')
+    }
   }
 
-  const deleteBlog = () => {
+  const deleteBlog = async () => {
     const confirmedDeletion = window.confirm(`Remove blog ${blog.title} by ${blog.author}`)
 
     if (confirmedDeletion) {
-      removeBlog(blog.id)
+      try {
+        dispatch( removeBlog(blog.id) )
+      } catch (exception) {
+        setNotification(exception.response.data.error, 'error')
+      }
     }
   }
 
