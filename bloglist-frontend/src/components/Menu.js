@@ -1,34 +1,47 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-
+import {
+  AppBar,
+  Toolbar,
+  Button,
+  Typography,
+} from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles'
 import { Link } from 'react-router-dom'
 import { logout } from '../reducers/loginReducer'
+
+const useStyles = makeStyles({
+  typographyStyle: {
+    textTransform: 'uppercase'
+  }
+})
 
 const Menu = () => {
   const user = useSelector(state => state.user)
   const dispatch = useDispatch()
-
-  const style = {
-    padding: 5,
-    backgroundColor: 'lightgrey',
-    marginBottom: 5
-  }
-
-  const styleMargin = {
-    marginRight: 10
-  }
+  const classes = useStyles()
 
   return (
-    <div style={style}>
-      <Link style={styleMargin} to='/'>blogs</Link>
-      <Link style={styleMargin} to='/users'>users</Link>
-      <span style={styleMargin} >
-        {user.name} logged in
-      </span>
-      <button onClick={() => dispatch( logout() )}>
-        logout
-      </button>
-    </div>
+    <AppBar position='static'>
+      <Toolbar>
+        <Button color='inherit' component={Link} to='/'>
+          blogs
+        </Button>
+
+        <Button color='inherit' component={Link} to='/users'>
+          users
+        </Button>
+
+        <Typography className={classes.typographyStyle} component='em'>
+          {user.name} logged in
+        </Typography>
+
+        <Button color='inherit' onClick={() => dispatch( logout() )}>
+          logout
+        </Button>
+      </Toolbar>
+    </AppBar>
+
   )
 }
 

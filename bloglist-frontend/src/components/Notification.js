@@ -1,12 +1,13 @@
 import React from 'react'
+import { Alert } from '@material-ui/lab'
 
 const Notification = ({ notification }) => {
   if (notification === null) return null
 
   return (
-    <div className={`notification ${notification.status === 'error' ? 'notification-error' : ''}`}>
+    <Alert severity={notification.status}>
       {notification.message}
-    </div>
+    </Alert>
   )
 }
 

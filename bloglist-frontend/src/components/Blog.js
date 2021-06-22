@@ -2,6 +2,7 @@ import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { updateBlog, removeBlog, addComment } from '../reducers/blogReducer'
+import { Typography, Link, Button, Box } from '@material-ui/core'
 
 import Comments from './Comments'
 
@@ -53,21 +54,38 @@ const Blog = ({ setNotification }) => {
 
   return (
     <div className='blog'>
-      <h2>{blog.title} {blog.author}</h2>
+      <Typography variant='h4' component='h2' gutterBottom>
+        {blog.title} {blog.author}
+      </Typography>
 
-      <a href={blog.url} target='_blank' rel='noreferrer'>{blog.url}</a>
-      <div>
+      <Link color='primary' href={blog.url} target='_blank' rel='noreferrer'>
+        {blog.url}
+      </Link>
+
+      <Typography variant='body1' component='div'>
         likes {blog.likes}
-        <button onClick={incrementLikes}>like</button>
-      </div>
 
-      <div>
+        <Box component='span' ml={1}>
+          <Button
+            variant='contained'
+            color='primary'
+            size='small'
+            onClick={incrementLikes}
+          >
+            like
+          </Button>
+        </Box>
+      </Typography>
+
+      <Typography variant='body1' component='div'>
         added by {blog.author}
-      </div>
+      </Typography>
 
-      <div>
-        <button onClick={deleteBlog}>remove</button>
-      </div>
+      <Box mt={1}>
+        <Button variant='contained' size='small' onClick={deleteBlog}>
+          remove
+        </Button>
+      </Box>
 
       <Comments comments={blog.comments} createComment={createComment(blog.id)} />
     </div>

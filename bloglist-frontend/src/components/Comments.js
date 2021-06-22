@@ -1,4 +1,16 @@
 import React from 'react'
+import { Box, Typography } from '@material-ui/core'
+import { List, ListItem, ListItemText } from '@material-ui/core/index'
+
+const Comment = ({ comment }) => {
+  return (
+    <ListItem disableGutters divider>
+      <ListItemText>
+        {comment}
+      </ListItemText>
+    </ListItem>
+  )
+}
 
 const Comments = ({ comments, createComment }) => {
 
@@ -11,22 +23,20 @@ const Comments = ({ comments, createComment }) => {
   }
 
   return (
-    <div>
-      <h3>comments</h3>
+    <Box my={2}>
+      <Typography variant='h5' component='h3' gutterBottom>comments</Typography>
 
       <form onSubmit={handleSubmit}>
         <input name='comment' />
         <button type='submit'>add comment</button>
       </form>
 
-      <ul>
+      <List dense>
         {comments.map(comment =>
-          <li key={comment.id}>
-            {comment.content}
-          </li>
+          <Comment key={comment.id} comment={comment.content} />
         )}
-      </ul>
-    </div>
+      </List>
+    </Box>
   )
 }
 

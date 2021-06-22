@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Switch, Route, Link } from 'react-router-dom'
+import { Switch, Route } from 'react-router-dom'
+import { Container, Typography } from '@material-ui/core/index'
 
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
@@ -14,6 +15,7 @@ import { checkLoggedUser, login } from './reducers/loginReducer'
 import Users from './components/Users'
 import User from './components/User'
 import Menu from './components/Menu'
+import BlogList from './components/BlogList'
 
 const App = () => {
   const [username, setUsername] = useState('')
@@ -73,8 +75,10 @@ const App = () => {
 
   if (user === null) {
     return (
-      <>
-        <h2>Log in to application</h2>
+      <Container>
+        <Typography variant='h4' component='h2'>
+          Log in to application
+        </Typography>
         <Notification notification={notification} />
         <LoginForm
           username={username}
@@ -83,22 +87,15 @@ const App = () => {
           handleUsernameChange={handleInputOnChange(setUsername)}
           handlePasswordChange={handleInputOnChange(setPassword)}
         />
-      </>
+      </Container>
     )
   }
 
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderColor: 'black',
-    borderWidth: 1,
-    marginBottom: 5
-  }
-
   return (
-    <div>
-      <h2>blogs</h2>
+    <Container>
+      <Typography variant='h4' component='h2'>
+        blogs
+      </Typography>
       <Menu />
       <Notification notification={notification} />
 
@@ -117,16 +114,10 @@ const App = () => {
             <BlogForm createBlog={addBlog} />
           </Togglable>
 
-          {sortedBlogsByLikes.map(blog =>
-            <Link key={blog.id} to={`/blogs/${blog.id}`}>
-              <div style={blogStyle}>
-                {blog.title}
-              </div>
-            </Link>
-          )}
+          <BlogList blogs={sortedBlogsByLikes} />
         </Route>
       </Switch>
-    </div>
+    </Container>
   )
 }
 

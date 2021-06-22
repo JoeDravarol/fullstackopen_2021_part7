@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { TextField, Button, Box, Typography } from '@material-ui/core'
 
 const BlogForm = ({ createBlog }) => {
   const [title, setTitle] = useState('')
@@ -21,43 +22,42 @@ const BlogForm = ({ createBlog }) => {
 
   return (
     <div>
-      <h2>Create new</h2>
+      <Typography variant='h4' component='h2' gutterBottom>Create new</Typography>
 
       <form onSubmit={addBlog}>
         <div>
-          title:
-          <input
+          <TextField
             id='title'
-            type='text'
+            label='title'
             value={title}
-            name='Title'
             onChange={({ target }) => setTitle(target.value)}
+            variant='outlined'
           />
         </div>
         <div>
-          author:
-          <input
+          <TextField
             id='author'
-            type='text'
+            label='author'
             value={author}
-            name='Author'
             onChange={({ target }) => setAuthor(target.value)}
+            variant='outlined'
           />
         </div>
         <div>
-          url:
-          <input
+          <TextField
             id='url'
-            type='text'
+            label='url'
             value={url}
-            name='Url'
             onChange={({ target }) => setUrl(target.value)}
+            variant='outlined'
           />
         </div>
 
-        <button type='submit'>
-          create
-        </button>
+        <Box my={1}>
+          <Button variant='contained' color='primary' type='submit'>
+            create
+          </Button>
+        </Box>
       </form>
     </div>
   )
