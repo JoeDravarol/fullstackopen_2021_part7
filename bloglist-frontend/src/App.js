@@ -7,18 +7,16 @@ import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 
-import blogService from './services/blogs'
-import loginService from './services/login'
-
 import { setNotification } from './reducers/notificationReducer'
 import { initializeBlogs, createBlog } from './reducers/blogReducer'
+import { checkLoggedUser, login, logout } from './reducers/loginReducer'
 
 const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [user, setUser] = useState(null)
   const blogs = useSelector(state => state.blogs)
   const notification = useSelector(state => state.notification)
+  const user = useSelector(state => state.user)
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -26,13 +24,7 @@ const App = () => {
   }, [])
 
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
-
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      blogService.setToken(user.token)
-      setUser(user)
-    }
+    dispatch( checkLoggedUser() )
   }, [])
 
   const displayNotificationWith = (message, status='success') => {
@@ -43,30 +35,11 @@ const App = () => {
   const handleLogin = async (event) => {
     event.preventDefault()
 
-    try {
-      const user = await loginService.login({
-        username, password
-      })
+    dispatch( login(username, password) )
 
-      blogService.setToken(user.token)
+    setUsername('')
+    setPassword('')
 
-      window.localStorage.setItem(
-        'loggedBlogappUser',
-        JSON.stringify(user)
-      )
-
-      setUser(user)
-      setUsername('')
-      setPassword('')
-    } catch (exception) {
-      displayNotificationWith(exception.response.data.error, 'error')
-    }
-  }
-
-  const handleLogout = () => {
-    window.localStorage.removeItem('loggedBlogappUser')
-    setUser(null)
-    blogService.setToken(null)
   }
 
   const handleInputOnChange = (callback) => {
@@ -116,7 +89,7 @@ const App = () => {
       <Notification notification={notification} />
       <div>
         {user.name} logged in
-        <button onClick={handleLogout}>
+        <button onClick={() => dispatch( logout() )}>
           logout
         </button>
       </div>
