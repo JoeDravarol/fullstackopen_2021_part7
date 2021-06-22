@@ -10,9 +10,10 @@ import Togglable from './components/Togglable'
 
 import { setNotification } from './reducers/notificationReducer'
 import { initializeBlogs, createBlog } from './reducers/blogReducer'
-import { checkLoggedUser, login, logout } from './reducers/loginReducer'
+import { checkLoggedUser, login } from './reducers/loginReducer'
 import Users from './components/Users'
 import User from './components/User'
+import Menu from './components/Menu'
 
 const App = () => {
   const [username, setUsername] = useState('')
@@ -98,13 +99,8 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
+      <Menu />
       <Notification notification={notification} />
-      <div>
-        {user.name} logged in
-        <button onClick={() => dispatch( logout() )}>
-          logout
-        </button>
-      </div>
 
       <Switch>
         <Route path='/users/:id'>
