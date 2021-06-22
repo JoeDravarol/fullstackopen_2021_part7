@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import { Switch, Route } from 'react-router-dom'
 
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
@@ -10,6 +11,7 @@ import Togglable from './components/Togglable'
 import { setNotification } from './reducers/notificationReducer'
 import { initializeBlogs, createBlog } from './reducers/blogReducer'
 import { checkLoggedUser, login, logout } from './reducers/loginReducer'
+import Users from './components/Users'
 
 const App = () => {
   const [username, setUsername] = useState('')
@@ -94,17 +96,24 @@ const App = () => {
         </button>
       </div>
 
-      <Togglable buttonLabel='create new blog' ref={blogFormRef}>
-        <BlogForm createBlog={addBlog} />
-      </Togglable>
+      <Switch>
+        <Route path='/users'>
+          <Users />
+        </Route>
+        <Route path='/'>
+          <Togglable buttonLabel='create new blog' ref={blogFormRef}>
+            <BlogForm createBlog={addBlog} />
+          </Togglable>
 
-      {sortedBlogsByLikes.map(blog =>
-        <Blog
-          key={blog.id}
-          blog={blog}
-          setNotification={displayNotificationWith}
-        />
-      )}
+          {sortedBlogsByLikes.map(blog =>
+            <Blog
+              key={blog.id}
+              blog={blog}
+              setNotification={displayNotificationWith}
+            />
+          )}
+        </Route>
+      </Switch>
     </div>
   )
 }
