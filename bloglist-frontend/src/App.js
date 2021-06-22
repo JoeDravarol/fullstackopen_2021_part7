@@ -11,19 +11,18 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 
 import { setNotification } from './reducers/notificationReducer'
+import { initializeBlogs, createBlog } from './reducers/blogReducer'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const notification = useSelector(state => state)
+  const blogs = useSelector(state => state.blogs)
+  const notification = useSelector(state => state.notification)
   const dispatch = useDispatch()
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs( blogs )
-    )
+    dispatch( initializeBlogs() )
   }, [])
 
   useEffect(() => {
@@ -79,19 +78,18 @@ const App = () => {
   const addBlog = async (blogObject) => {
 
     try {
-      const returnedBlog = await blogService.create(blogObject)
+      dispatch( createBlog(blogObject) )
 
       blogFormRef.current.toggleVisibility()
       displayNotificationWith(
-        `a new blog ${returnedBlog.title} by ${returnedBlog.author} added`
+        `a new blog ${blogObject.title} by ${blogObject.author} added`
       )
-      setBlogs(blogs.concat(returnedBlog))
     } catch (exception) {
       displayNotificationWith(exception.response.data.error, 'error')
     }
   }
 
-  const updateBlog = async (id, blogObject) => {
+  const updateBlog = async () => {
     try {
       const returnedBlog = await blogService.update(id, blogObject)
       const updatedBlogs = blogs.map(
