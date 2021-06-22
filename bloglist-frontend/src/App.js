@@ -12,6 +12,7 @@ import { setNotification } from './reducers/notificationReducer'
 import { initializeBlogs, createBlog } from './reducers/blogReducer'
 import { checkLoggedUser, login, logout } from './reducers/loginReducer'
 import Users from './components/Users'
+import User from './components/User'
 
 const App = () => {
   const [username, setUsername] = useState('')
@@ -97,6 +98,9 @@ const App = () => {
       </div>
 
       <Switch>
+        <Route path='/users/:id'>
+          <User />
+        </Route>
         <Route path='/users'>
           <Users />
         </Route>
