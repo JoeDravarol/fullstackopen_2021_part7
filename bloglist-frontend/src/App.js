@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Switch, Route } from 'react-router-dom'
+import { Switch, Route, Link } from 'react-router-dom'
 
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
@@ -86,6 +86,15 @@ const App = () => {
     )
   }
 
+  const blogStyle = {
+    paddingTop: 10,
+    paddingLeft: 2,
+    border: 'solid',
+    borderColor: 'black',
+    borderWidth: 1,
+    marginBottom: 5
+  }
+
   return (
     <div>
       <h2>blogs</h2>
@@ -104,17 +113,20 @@ const App = () => {
         <Route path='/users'>
           <Users />
         </Route>
+        <Route path='/blogs/:id'>
+          <Blog setNotification={displayNotificationWith} />
+        </Route>
         <Route path='/'>
           <Togglable buttonLabel='create new blog' ref={blogFormRef}>
             <BlogForm createBlog={addBlog} />
           </Togglable>
 
           {sortedBlogsByLikes.map(blog =>
-            <Blog
-              key={blog.id}
-              blog={blog}
-              setNotification={displayNotificationWith}
-            />
+            <Link key={blog.id} to={`/blogs/${blog.id}`}>
+              <div style={blogStyle}>
+                {blog.title}
+              </div>
+            </Link>
           )}
         </Route>
       </Switch>
