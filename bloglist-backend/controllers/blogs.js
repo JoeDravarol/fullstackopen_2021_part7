@@ -40,7 +40,11 @@ blogsRouter.post('/:id/comments', async (request, response) => {
 
   const savedComment = await comment.save()
   blog.comments = blog.comments.concat(savedComment)
-  const savedBlog = await blog.save()
+  const savedBlog = await blog.save().then(blog =>
+    blog
+      .populate('comments', { content: 1 })
+      .execPopulate()
+  )
 
   response.status(201).json(savedBlog)
 })
@@ -66,7 +70,7 @@ blogsRouter.put('/:id', async (request, response) => {
     request.params.id,
     blog,
     { new: true }
-  )
+  ).populate('comments', { content: 1 })
 
   response.json(updatedBlog)
 })
