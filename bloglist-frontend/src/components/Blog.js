@@ -3,6 +3,8 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { updateBlog, removeBlog } from '../reducers/blogReducer'
 
+import Comments from './Comments'
+
 const Blog = ({ setNotification }) => {
   const id = useParams().id
   const blog = useSelector(state =>
@@ -57,6 +59,8 @@ const Blog = ({ setNotification }) => {
       <div>
         <button onClick={deleteBlog}>remove</button>
       </div>
+
+      <Comments comments={blog.comments}/>
     </div>
   )
 }
