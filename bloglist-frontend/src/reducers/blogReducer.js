@@ -68,4 +68,17 @@ export const removeBlog = (id) => {
   }
 }
 
+export const addComment = (blogId, comment) => {
+  return async dispatch => {
+    const returnedBlog = await blogService.addComment(blogId, { comment })
+    dispatch({
+      type: 'UPDATE_BLOG',
+      payload: {
+        data: returnedBlog,
+        id: blogId
+      }
+    })
+  }
+}
+
 export default reducer
