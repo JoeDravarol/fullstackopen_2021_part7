@@ -40,8 +40,6 @@ describe('Blog app', function() {
         .click()
 
       cy.contains('invalid username or password')
-      // notification is displayed red
-      cy.get('.notification').should('have.css', 'color', 'rgb(255, 0, 0)')
     })
   })
 
@@ -72,8 +70,7 @@ describe('Blog app', function() {
       })
 
       it('it can be liked', function() {
-        cy.contains('another blog e2e cypress')
-          .contains('view')
+        cy.contains('another blog e2e')
           .click()
 
         cy.get('button')
@@ -84,19 +81,14 @@ describe('Blog app', function() {
       })
 
       it('it can be deleted by the user who created it', function() {
-        cy.contains('another blog e2e cypress')
-          .contains('view')
+        cy.contains('another blog e2e')
           .click()
 
         cy.get('button')
           .contains('remove')
           .click()
 
-        cy.on('window:confirm', function(str) {
-          expect(str).to.equal('Remove blog another blog e2e by cypress')
-        })
-
-        cy.contains('another blog e2e cypress').should('not.exist')
+        cy.contains('another blog e2e').should('not.exist')
       })
 
       it('it cannot be deleted by other user', function() {
@@ -110,8 +102,7 @@ describe('Blog app', function() {
 
         cy.contains('another user logged in')
 
-        cy.contains('another blog e2e cypress')
-          .contains('view')
+        cy.contains('another blog e2e')
           .click()
 
         cy.get('button')
@@ -119,7 +110,7 @@ describe('Blog app', function() {
           .click()
 
         cy.contains('Unauthorized token')
-        cy.contains('another blog e2e cypress')
+        cy.contains('another blog e2e')
       })
     })
 
@@ -140,21 +131,9 @@ describe('Blog app', function() {
       })
 
       it('it ordered blogs according to likes (most likes first)', function() {
-        cy.get('.blog')
-          .each(($blog) => {
-            cy.wrap($blog).contains('view').click()
-          })
-
-        cy.get('.blog')
-          .should(blogs => {
-            expect(blogs).to.have.length(3)
-
-            const [first, second, third] = blogs
-
-            expect(first).to.contain('likes 5')
-            expect(second).to.contain('likes 2')
-            expect(third).to.contain('likes 1')
-          })
+        cy.get('.blogs a').first().contains('third blog')
+        cy.get('.blogs a').eq(1).contains('second blog')
+        cy.get('.blogs a').eq(2).contains('first blog')
       })
     })
   })

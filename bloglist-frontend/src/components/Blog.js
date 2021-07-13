@@ -36,11 +36,7 @@ const Blog = ({ setNotification }) => {
     const confirmedDeletion = window.confirm(`Remove blog ${blog.title} by ${blog.author}`)
 
     if (confirmedDeletion) {
-      try {
-        dispatch( removeBlog(blog.id) )
-      } catch (exception) {
-        setNotification(exception.response.data.error, 'error')
-      }
+      dispatch( removeBlog(blog.id) )
     }
   }
 

@@ -11,7 +11,7 @@ const reducer = (state = null, action) => {
 
 let timeoutId
 
-export const setNotification = (notification, timeInSeconds) => {
+export const setNotification = (notification, timeInSeconds = 3) => {
   const timeInMilliseconds = timeInSeconds * 1000
   clearTimeout(timeoutId)
 
