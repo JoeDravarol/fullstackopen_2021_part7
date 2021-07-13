@@ -136,32 +136,48 @@ describe('addition of a new blog', () => {
 })
 
 describe('deletion of a blog', () => {
-  test('succeeds with status code 204 if id is valid', async () => {
-    const blogsAtStart = await helper.blogsInDb()
-    const blogToDelete = blogsAtStart[0]
-  
-    const loginResponse = await api
+  let result, headers
+
+  beforeEach(async () => {
+    const newBlog = {
+      title: 'Great developer experience',
+      author: 'Hector Ramos',
+      url: 'https://jestjs.io/blog/2017/01/30/a-great-developer-experience',
+      likes: 7
+    }
+
+    const loginResult = await api
       .post('/api/login')
       .send(helper.testUser)
-      .expect(200)
-      .expect('Content-Type', /application\/json/)
-    
-    const userToken = loginResponse.body.token
+
+    headers = {
+      'Authorization': `Bearer ${loginResult.body.token}`
+    }
+
+    result = await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .set(headers)
+  })
+
+  test('succeeds with status code 204 if id is valid', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToDelete = result.body
 
     await api
       .delete(`/api/blogs/${blogToDelete.id}`)
-      .set('Authorization', `Bearer ${userToken}`)
+      .set(headers)
       .expect(204)
     
     const blogsAtEnd = await helper.blogsInDb()
   
     expect(blogsAtEnd).toHaveLength(
-      helper.initialBlogs.length -1
+      blogsAtStart.length - 1
     )
   
     const blogsTitle = blogsAtEnd.map(b => b.title)
   
-    expect(blogsTitle).not.toContain(blogToDelete)
+    expect(blogsTitle).not.toContain(blogToDelete.title)
   })
 })
 
